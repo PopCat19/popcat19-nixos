@@ -34,13 +34,56 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # HYPRLAND_NOTE: Sound setup with Pipewire, recommended for Wayland.
+  # This replaces the previous commented pulseaudio and simpler pipewire config.
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true; # For 32-bit applications
+    pulse.enable = true;      # Provides PulseAudio compatibility
+    # jack.enable = true;     # Enable if you need JACK support
+  };
+  security.rtkit.enable = true; # Recommended for Pipewire real-time priorities
 
+  # HYPRLAND_NOTE: Hyprland Wayland compositor and related XDG portal setup.
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true; # Enable XWayland for X11 applications
+    # nvidiaPatches = true; # HYPRLAND_NOTE: Uncomment if you have an NVIDIA GPU
+  };
 
-  
+  # Enable XDG Desktop Portal for Hyprland and other desktop integration.
+  # This is crucial for features like screen sharing, file pickers, etc.
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk # For GTK apps
+      # xdg-desktop-portal-kde # HYPRLAND_NOTE: Uncomment if you use many KDE/Qt apps
+    ];
+  };
+
+  # HYPRLAND_NOTE: Session variables for Wayland environment.
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";         # Hint for Electron apps to use Wayland
+    WLR_NO_HARDWARE_CURSORS = "1"; # Optional: if you have cursor issues, try "0" or remove
+    # HYPRLAND_NOTE: For NVIDIA, you might need these if not using nvidiaPatches or if issues persist:
+    # LIBVA_DRIVER_NAME = "nvidia";
+    # XDG_SESSION_TYPE = "wayland";
+    # GBM_BACKEND = "nvidia-drm";
+    # __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
+  # HYPRLAND_NOTE: Disable the main Xserver if Hyprland is your primary session.
+  # Hyprland (via xwayland.enable = true above) will handle X11 apps.
+  # If you want a separate X11 session option via a display manager,
+  # you'd configure the display manager to offer both.
+  # For a pure Hyprland setup, set this to false.
+  services.xserver.enable = false;
 
   # Configure keymap in X11
+  # HYPRLAND_NOTE: This xkb.layout setting is for Xorg sessions.
+  # Hyprland's keyboard layout is configured in its own ~/.config/hypr/hyprland.conf
   services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
@@ -48,12 +91,12 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  # hardware.pulseaudio.enable = true;
+  # hardware.pulseaudio.enable = true; # HYPRLAND_NOTE: Replaced by the services.pipewire block above.
   # OR
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
+  # services.pipewire = { # HYPRLAND_NOTE: This simpler block is replaced by the more complete one above.
+  #   enable = true;
+  #   pulse.enable = true;
+  # };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -61,9 +104,24 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.popcat19 = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "NetworkManager" ]; # Enable ‘sudo’ for the user.
+    # HYPRLAND_NOTE: Corrected "NetworkManager" to "networkmanager" (lowercase n).
+    # Added "audio" and "video" which are common for desktop users.
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       tree
+      # HYPRLAND_NOTE: Essential tools for a Hyprland desktop environment
+      kitty      # Fast GPU-based terminal
+      wofi       # Application launcher (rofi also works with Wayland tweaks)
+      waybar     # Highly customizable Wayland bar
+      mako       # Notification daemon for Wayland
+      swaybg     # Wallpaper utility (hyprpaper is another option)
+      swaylock-effects # Screen locker with effects
+      grim       # Screenshot utility for Wayland
+      slurp      # For selecting a region for grim
+      wl-clipboard # Wayland clipboard utilities (wl-copy, wl-paste)
+      cliphist   # Clipboard history manager (optional, needs setup)
+      jq         # Command-line JSON processor, often useful for scripting
+      polkit_gnome # PolicyKit authentication agent (for GUI auth prompts)
     ];
   };
 
@@ -79,7 +137,48 @@
     fish
     ranger
     git
+    gh # HYPRLAND_NOTE: GitHub CLI, useful for managing your config repo
+    # HYPRLAND_NOTE: Essential fonts for a graphical environment
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    font-awesome # For icons in waybar, etc.
+    (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFontMono" ]; }) # Example Nerd Font
+    # Add any other system-wide utilities you need
   ];
+
+  # HYPRLAND_NOTE: Explicit font configuration for better discovery by applications.
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    font-awesome
+    (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFontMono" ]; })
+    # Add any other fonts you like and want to be system-discoverable
+  ];
+
+  # HYPRLAND_NOTE: Optional: Display Manager (Graphical Login)
+  # If you want to log in graphically and select Hyprland.
+  # Otherwise, you can log in on a TTY and type `Hyprland`.
+  # Make sure only one display manager is enabled if you use one.
+  services.displayManager.sddm.enable = false; # Example: ensure others are off
+  # services.displayManager.lightdm.enable = false; # Example: ensure others are off
+
+  # Example with greetd (a lightweight greeter often used with tiling WMs)
+  # services.greetd = {
+  #   enable = true;
+  #   settings = {
+  #     default_session = {
+  #       command = "${pkgs.hyprland}/bin/Hyprland";
+  #       # HYPRLAND_NOTE: Make sure this user matches your actual username
+  #       user = config.users.users.popcat19.name;
+  #     };
+  #   };
+  #   # You can use various greeters with greetd, e.g., tuigreet (console) or wlgreet (Wayland)
+  #   # package = pkgs.greetd.tuigreet; # For a TTY-like greeter
+  #   # package = pkgs.wlgreet; # For a graphical Wayland greeter (needs wlgreet in systemPackages too)
+  # };
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -98,7 +197,14 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  # networking.firewall.enable = false; # HYPRLAND_NOTE: Enabling basic firewall below.
+  # HYPRLAND_NOTE: Basic firewall, allowing all localhost traffic.
+  networking.firewall = {
+    enable = true;
+    trustedInterfaces = [ "lo" ];
+    # allowedTCPPorts = [ ... ]; # Add ports for specific services if needed
+    # allowedUDPPorts = [ ... ];
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -125,4 +231,3 @@
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
-
