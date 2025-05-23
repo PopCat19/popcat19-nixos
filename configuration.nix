@@ -126,7 +126,6 @@
       vesktop
       zed
       cliphist
-      dolphin
       hyprshade
       blueberry
       udiskie
@@ -135,6 +134,7 @@
       catppuccin-gtk
       catppuccin-sddm-corners
       catppuccin-papirus-folders
+      kdePackages.dolphin
     ];
     shell = pkgs.fish;
   };
