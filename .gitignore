@@ -1,0 +1,4 @@
+# Nix build results/symlinks
+result*
+*~
+*.swp
