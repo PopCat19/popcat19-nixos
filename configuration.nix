@@ -140,7 +140,7 @@
     gh # HYPRLAND_NOTE: GitHub CLI, useful for managing your config repo
     # HYPRLAND_NOTE: Essential fonts for a graphical environment
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     font-awesome # For icons in waybar, etc.
     (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFontMono" ]; }) # Example Nerd Font
