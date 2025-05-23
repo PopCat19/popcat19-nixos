@@ -131,11 +131,17 @@
       blueberry
       udiskie
       networkmanagerapplet
+      catppuccin-qt5ct
+      catppuccin-gtk
+      catppuccin-sddm-corners
+      catppuccin-papirus-folders
     ];
+    shell = pkgs.fish;
   };
 
   programs.firefox.enable = true;
   programs.hyprland.withUWSM = true;
+  programs.fish.enable = true;
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -144,7 +150,6 @@
     wget
     curl
     micro
-    fish
     ranger
     superfile
     git
