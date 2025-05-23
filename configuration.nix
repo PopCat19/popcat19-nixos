@@ -143,17 +143,17 @@
     noto-fonts-cjk-sans
     noto-fonts-emoji
     font-awesome # For icons in waybar, etc.
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFontMono" ]; }) # Example Nerd Font
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) # Example Nerd Font
     # Add any other system-wide utilities you need
   ];
 
   # HYPRLAND_NOTE: Explicit font configuration for better discovery by applications.
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     font-awesome
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "SymbolsNerdFontMono" ]; })
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     # Add any other fonts you like and want to be system-discoverable
   ];
 
