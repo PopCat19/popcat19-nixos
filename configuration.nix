@@ -79,7 +79,7 @@
   # If you want a separate X11 session option via a display manager,
   # you'd configure the display manager to offer both.
   # For a pure Hyprland setup, set this to false.
-  services.xserver.enable = false;
+  services.xserver.enable = true;
 
   # Configure keymap in X11
   # HYPRLAND_NOTE: This xkb.layout setting is for Xorg sessions.
@@ -113,20 +113,30 @@
       kitty      # Fast GPU-based terminal
       wofi       # Application launcher (rofi also works with Wayland tweaks)
       waybar     # Highly customizable Wayland bar
-      mako       # Notification daemon for Wayland
-      swaybg     # Wallpaper utility (hyprpaper is another option)
-      swaylock-effects # Screen locker with effects
+      dunst       # Notification daemon for Wayland
+      hyprpaper     # Wallpaper utility (hyprpaper is another option)
       grim       # Screenshot utility for Wayland
       slurp      # For selecting a region for grim
       wl-clipboard # Wayland clipboard utilities (wl-copy, wl-paste)
       cliphist   # Clipboard history manager (optional, needs setup)
       jq         # Command-line JSON processor, often useful for scripting
-      polkit_gnome # PolicyKit authentication agent (for GUI auth prompts)
+      hyprpolkitagent # PolicyKit authentication agent (for GUI auth prompts)
+      hyprutils
+      hyprwall
+      vesktop
+      zed
+      cliphist
+      dolphin
+      hyprshade
+      blueberry
+      udiskie
+      networkmanagerapplet
     ];
   };
 
   programs.firefox.enable = true;
-
+  programs.hyprland.withUWSM = true;
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -136,6 +146,7 @@
     micro
     fish
     ranger
+    superfile
     git
     gh # HYPRLAND_NOTE: GitHub CLI, useful for managing your config repo
     # HYPRLAND_NOTE: Essential fonts for a graphical environment
@@ -161,7 +172,7 @@
   # If you want to log in graphically and select Hyprland.
   # Otherwise, you can log in on a TTY and type `Hyprland`.
   # Make sure only one display manager is enabled if you use one.
-  services.displayManager.sddm.enable = false; # Example: ensure others are off
+  services.displayManager.sddm.enable = true; # Example: ensure others are off
   # services.displayManager.lightdm.enable = false; # Example: ensure others are off
 
   # Example with greetd (a lightweight greeter often used with tiling WMs)
