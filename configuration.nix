@@ -16,6 +16,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelModules = ["i2c-dev"];
     services.udev.extraRules = ''
           KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
@@ -88,7 +89,7 @@
   # Hyprland (via xwayland.enable = true above) will handle X11 apps.
   # If you want a separate X11 session option via a display manager,
   # you'd configure the display manager to offer both.
-  # For a pure Hyprland setup, set this to false.
+  # For a pure Hyprland setup, set this to false. SDDM requires this though.
   services.xserver.enable = true;
 
   # Configure keymap in X11
@@ -167,6 +168,7 @@
       mangohud
       goverlay
       scrcpy
+      zed-editor_git
     ];
     shell = pkgs.fish;
   };
@@ -186,8 +188,6 @@
   
   hardware.i2c.enable = true;
   hardware.i2c.group = "i2c";
-
-  chaotic.mesa-git.enable = true;
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
