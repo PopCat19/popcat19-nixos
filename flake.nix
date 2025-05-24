@@ -6,11 +6,9 @@
     # Pin nixpkgs to a specific channel for reproducibility.
     # Using nixos-unstable as per your hyprpanel example and likely preference.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # IMPORTANT
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     aagl.inputs.nixpkgs.follows = "nixpkgs"; # Name of nixpkgs input you want to use
-
-    # For a more stable setup, you could use a tagged release, e.g.:
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05"; # Or your current NixOS version
 
     hyprpanel = {
       url = "github:Jas-SinghFSU/HyprPanel";
@@ -27,7 +25,7 @@
     # };
   };
 
-  outputs = { self, nixpkgs, hyprpanel, aagl, ... }@inputs: let
+  outputs = { self, nixpkgs, hyprpanel, aagl, chaotic, ... }@inputs: let
     # Define the system architecture you are using.
     # "x86_64-linux" is common for most desktops/laptops.
     # Change if you use a different architecture (e.g., "aarch64-linux").
@@ -46,7 +44,7 @@
     # NixOS configuration for your specific host
     nixosConfigurations."${myHostname}" = nixpkgs.lib.nixosSystem {
       inherit system;
-
+      
       # Pass all flake inputs to your NixOS modules.
       # This allows modules to reference `inputs` if needed, e.g. `inputs.hyprpanel`.
       specialArgs = { inherit inputs; };
@@ -64,7 +62,7 @@
 
         # Import your main NixOS configuration file
         ./configuration.nix
-
+        chaotic.nixosModules.default # IMPORTANT
         # Example for Home Manager (if you decide to use it later)
         # Make sure to uncomment `home-manager` in the `inputs` section above.
         # home-manager.nixosModules.home-manager

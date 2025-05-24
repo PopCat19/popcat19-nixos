@@ -186,6 +186,8 @@
   
   hardware.i2c.enable = true;
   hardware.i2c.group = "i2c";
+
+  chaotic.mesa-git.enable = true;
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -207,6 +209,7 @@
     # Add any other system-wide utilities you need
     i2c-tools
     ddcutil
+    pkgs.lan-mouse_git
   ];
 
   # HYPRLAND_NOTE: Explicit font configuration for better discovery by applications.
