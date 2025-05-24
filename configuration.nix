@@ -3,16 +3,19 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, ... }:
-
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "ntfs" ];
   boot.kernelModules = ["i2c-dev"];
     services.udev.extraRules = ''
           KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
@@ -105,6 +108,11 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
+  nix.settings = {
+    substituters = [ "https://ezkea.cachix.org" ];
+    trusted-public-keys = [ "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI=" ];
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.popcat19 = {
     isNormalUser = true;
@@ -144,6 +152,17 @@
       nwg-look
       kdePackages.ark
       ddcui
+      easyeffects
+      papirus-icon-theme
+      kdePackages.gwenview
+      mpv
+      swww
+      ollama-rocm
+      audacious
+      audacious-plugins
+      lutris
+      mangohud
+      goverlay
     ];
     shell = pkgs.fish;
   };
@@ -151,9 +170,14 @@
   programs.firefox.enable = true;
   programs.hyprland.withUWSM = true;
   programs.fish.enable = true;
+  programs.gamemode.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+  programs.java.enable = true; 
+
 
   nixpkgs.config.allowUnfree = true;
 
+  services.blueman.enable = true;
   services.flatpak.enable = true;
   
   hardware.i2c.enable = true;
@@ -190,6 +214,14 @@
     nerd-fonts.jetbrains-mono
     # Add any other fonts you like and want to be system-discoverable
   ];
+
+  # steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
 
   # HYPRLAND_NOTE: Optional: Display Manager (Graphical Login)
   # If you want to log in graphically and select Hyprland.

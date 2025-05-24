@@ -6,6 +6,8 @@
     # Pin nixpkgs to a specific channel for reproducibility.
     # Using nixos-unstable as per your hyprpanel example and likely preference.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+    aagl.inputs.nixpkgs.follows = "nixpkgs"; # Name of nixpkgs input you want to use
 
     # For a more stable setup, you could use a tagged release, e.g.:
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05"; # Or your current NixOS version
@@ -25,7 +27,7 @@
     # };
   };
 
-  outputs = { self, nixpkgs, hyprpanel, ... }@inputs: let
+  outputs = { self, nixpkgs, hyprpanel, aagl, ... }@inputs: let
     # Define the system architecture you are using.
     # "x86_64-linux" is common for most desktops/laptops.
     # Change if you use a different architecture (e.g., "aarch64-linux").
@@ -52,7 +54,13 @@
       modules = [
         # Apply the HyprPanel overlay. This makes `pkgs.hyprpanel`
         # available within your NixOS modules (like configuration.nix).
-        { nixpkgs.overlays = [ inputs.hyprpanel.overlay ]; }
+        { nixpkgs.overlays = [ inputs.hyprpanel.overlay ]; 
+          imports = [ aagl.nixosModules.default ];
+          nix.settings = aagl.nixConfig; # Set up Cachix
+          programs.anime-game-launcher.enable = true; # Adds launcher and /etc/hosts rules
+          programs.anime-games-launcher.enable = true;
+          programs.honkers-railway-launcher.enable = true;
+        }
 
         # Import your main NixOS configuration file
         ./configuration.nix
