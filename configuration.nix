@@ -136,8 +136,9 @@
       catppuccin-papirus-folders
       kdePackages.dolphin
       pavucontrol
+      starship
     ];
-    shell = pkgs.fish;
+    # shell = pkgs.fish;
   };
 
   programs.firefox.enable = true;
