@@ -144,7 +144,6 @@
       nwg-look
       kdePackages.ark
       ddcui
-      flatpak
     ];
     shell = pkgs.fish;
   };
