@@ -13,6 +13,10 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelModules = ["i2c-dev"];
+    services.udev.extraRules = ''
+          KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+    '';
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -106,13 +110,12 @@
     isNormalUser = true;
     # HYPRLAND_NOTE: Corrected "NetworkManager" to "networkmanager" (lowercase n).
     # Added "audio" and "video" which are common for desktop users.
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "audio" "networkmanager" "i2c" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       tree
       # HYPRLAND_NOTE: Essential tools for a Hyprland desktop environment
       kitty      # Fast GPU-based terminal
       fuzzel      # Application launcher
-      waybar     # Highly customizable Wayland bar
       dunst       # Notification daemon for Wayland
       hyprpaper     # Wallpaper utility (hyprpaper is another option)
       grim       # Screenshot utility for Wayland
@@ -129,15 +132,19 @@
       blueberry
       udiskie
       networkmanagerapplet
-      catppuccin-qt5ct
-      catppuccin-gtk
-      catppuccin-sddm-corners
-      catppuccin-papirus-folders
       kdePackages.dolphin
       pavucontrol
       starship
       eza
       hyprpanel
+      pkgs.libsForQt5.qtstyleplugin-kvantum
+      libsForQt5.qt5ct
+      pkgs.rose-pine-kvantum
+      pkgs.themechanger
+      nwg-look
+      kdePackages.ark
+      ddcui
+      flatpak
     ];
     shell = pkgs.fish;
   };
@@ -145,6 +152,13 @@
   programs.firefox.enable = true;
   programs.hyprland.withUWSM = true;
   programs.fish.enable = true;
+
+  nixpkgs.config.allowUnfree = true;
+
+  services.flatpak.enable = true;
+  
+  hardware.i2c.enable = true;
+  hardware.i2c.group = "i2c";
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -164,6 +178,8 @@
     font-awesome # For icons in waybar, etc.
     nerd-fonts.jetbrains-mono
     # Add any other system-wide utilities you need
+    i2c-tools
+    ddcutil
   ];
 
   # HYPRLAND_NOTE: Explicit font configuration for better discovery by applications.
@@ -248,5 +264,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
-
 }
