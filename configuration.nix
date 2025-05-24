@@ -135,6 +135,7 @@
       catppuccin-sddm-corners
       catppuccin-papirus-folders
       kdePackages.dolphin
+      pavucontrol
     ];
     shell = pkgs.fish;
   };
