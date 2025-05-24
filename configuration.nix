@@ -111,7 +111,7 @@
       tree
       # HYPRLAND_NOTE: Essential tools for a Hyprland desktop environment
       kitty      # Fast GPU-based terminal
-      wofi       # Application launcher (rofi also works with Wayland tweaks)
+      fuzzel      # Application launcher
       waybar     # Highly customizable Wayland bar
       dunst       # Notification daemon for Wayland
       hyprpaper     # Wallpaper utility (hyprpaper is another option)
