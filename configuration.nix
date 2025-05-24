@@ -137,6 +137,7 @@
       kdePackages.dolphin
       pavucontrol
       starship
+      eza
     ];
     shell = pkgs.fish;
   };
