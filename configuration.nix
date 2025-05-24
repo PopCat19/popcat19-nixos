@@ -122,7 +122,6 @@
       jq         # Command-line JSON processor, often useful for scripting
       hyprpolkitagent # PolicyKit authentication agent (for GUI auth prompts)
       hyprutils
-      hyprwall
       vesktop
       zed
       cliphist
@@ -138,6 +137,7 @@
       pavucontrol
       starship
       eza
+      hyprpanel
     ];
     shell = pkgs.fish;
   };
@@ -162,7 +162,7 @@
     noto-fonts-cjk-sans
     noto-fonts-emoji
     font-awesome # For icons in waybar, etc.
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) # Example Nerd Font
+    nerd-fonts.jetbrains-mono
     # Add any other system-wide utilities you need
   ];
 
@@ -172,7 +172,7 @@
     noto-fonts-cjk-sans
     noto-fonts-emoji
     font-awesome
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    nerd-fonts.jetbrains-mono
     # Add any other fonts you like and want to be system-discoverable
   ];
 
@@ -228,7 +228,7 @@
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
