@@ -52,6 +52,9 @@
   };
   security.rtkit.enable = true; # Recommended for Pipewire real-time priorities
 
+  # waydroid
+  virtualisation.waydroid.enable = true;
+
   # HYPRLAND_NOTE: Hyprland Wayland compositor and related XDG portal setup.
   programs.hyprland = {
     enable = true;
@@ -163,6 +166,7 @@
       lutris
       mangohud
       goverlay
+      scrcpy
     ];
     shell = pkgs.fish;
   };
