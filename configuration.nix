@@ -138,7 +138,7 @@
       pavucontrol
       starship
     ];
-    # shell = pkgs.fish;
+    shell = pkgs.fish;
   };
 
   programs.firefox.enable = true;
