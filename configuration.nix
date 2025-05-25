@@ -56,6 +56,9 @@
   # waydroid
   virtualisation.waydroid.enable = true;
 
+  # xdg
+  xdg.mime.enable = true;
+
   # HYPRLAND_NOTE: Hyprland Wayland compositor and related XDG portal setup.
   programs.hyprland = {
     enable = true;
@@ -70,7 +73,7 @@
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk # For GTK apps
-      # xdg-desktop-portal-kde # HYPRLAND_NOTE: Uncomment if you use many KDE/Qt apps
+      kdePackages.xdg-desktop-portal-kde # HYPRLAND_NOTE: Uncomment if you use many KDE/Qt apps
     ];
   };
 
@@ -211,7 +214,8 @@
     # Add any other system-wide utilities you need
     i2c-tools
     ddcutil
-    pkgs.lan-mouse_git
+    xdg-utils
+    shared-mime-info
   ];
 
   # HYPRLAND_NOTE: Explicit font configuration for better discovery by applications.
