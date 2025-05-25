@@ -138,12 +138,12 @@
       hyprpolkitagent # PolicyKit authentication agent (for GUI auth prompts)
       hyprutils
       vesktop
-      zed
+      # zed
       cliphist
       hyprshade
       blueberry
       udiskie
-      networkmanagerapplet
+      # networkmanagerapplet
       kdePackages.dolphin
       pavucontrol
       starship
@@ -169,6 +169,7 @@
       goverlay
       scrcpy
       zed-editor_git
+      openrgb-with-all-plugins
     ];
     shell = pkgs.fish;
   };
@@ -183,8 +184,9 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  services.blueman.enable = true;
+  # services.blueman.enable = true;
   services.flatpak.enable = true;
+  services.hardware.openrgb.enable = true;
   
   hardware.i2c.enable = true;
   hardware.i2c.group = "i2c";
