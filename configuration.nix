@@ -173,6 +173,7 @@
       scrcpy
       zed-editor_git
       openrgb-with-all-plugins
+      btop-rocm
     ];
     shell = pkgs.fish;
   };
