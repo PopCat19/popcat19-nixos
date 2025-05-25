@@ -180,6 +180,7 @@
 
   programs.firefox.enable = true;
   programs.hyprland.withUWSM = true;
+  programs.uwsm.enable = true;
   programs.fish.enable = true;
   programs.gamemode.enable = true;
   programs.steam.gamescopeSession.enable = true;
